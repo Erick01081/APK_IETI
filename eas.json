@@ -1,10 +1,10 @@
 {
   "build": {
-    "release": {  // 🚀 Perfil "release" al nivel raíz de "build"
+    "release": {  // Nombre del perfil (puedes usar cualquier nombre)
+      "channel": "production",  // Opcional: para gestionar updates
       "android": {
-        "workflow": "generic",  // o "managed" si usas Expo Go
-        "buildType": "apk",     // Genera un archivo APK
-        "packageName": "com.tuapp.android"  // Reemplaza con tu ID de paquete
+        "buildType": "apk",  // Genera un APK (no app bundle)
+        "gradleCommand": ":app:assembleRelease"  // Solo para proyectos nativos
       }
     }
   }
