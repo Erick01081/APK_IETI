@@ -1,15 +1,11 @@
 {
   "build": {
-    "android": {
-      "release": {
-        "workflow": "generic",
-        "buildType": "apk",
-        "packageName": "com.tuapp.android",
-        "version": 1
+    "release": {  // 🚀 Perfil "release" al nivel raíz de "build"
+      "android": {
+        "workflow": "generic",  // o "managed" si usas Expo Go
+        "buildType": "apk",     // Genera un archivo APK
+        "packageName": "com.tuapp.android"  // Reemplaza con tu ID de paquete
       }
     }
-  },
-  "cli": {
-    "version": ">= 6.0.0"
   }
 }
