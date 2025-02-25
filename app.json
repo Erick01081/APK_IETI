@@ -1,7 +1,11 @@
 {
   "expo": {
+    "name": "Mi App",
+    "slug": "mi-app",
+    "version": "1.0.0",
     "android": {
-      "package": "com.tuapp.android" // ¡Debe ser igual al de eas.json!
+      "package": "com.tuapp.android",  // Campo obligatorio
+      "versionCode": 1  // Controla las actualizaciones en Play Store
     }
   }
 }
