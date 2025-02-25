@@ -1,0 +1,15 @@
+{
+  "build": {
+    "android": {
+      "release": {
+        "workflow": "generic",
+        "buildType": "apk",
+        "packageName": "com.tuapp.android",
+        "version": 1
+      }
+    }
+  },
+  "cli": {
+    "version": ">= 6.0.0"
+  }
+}
