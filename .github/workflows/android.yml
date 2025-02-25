@@ -21,4 +21,4 @@ jobs:
       - name: Build APK with EAS
         run: eas build --platform android --profile release --non-interactive
         env:
-          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}  # ¡Clave para funcionar en CI!
