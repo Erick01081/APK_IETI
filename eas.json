@@ -1,11 +1,14 @@
 {
   "build": {
-    "release": {  // Nombre del perfil (puedes usar cualquier nombre)
-      "channel": "production",  // Opcional: para gestionar updates
+    "release": {
+      "channel": "production",
       "android": {
-        "buildType": "apk",  // Genera un APK (no app bundle)
-        "gradleCommand": ":app:assembleRelease"  // Solo para proyectos nativos
+        "buildType": "apk"
       }
     }
+  },
+  "cli": {
+    "appVersionSource": "local",  // ⚠️ Campo requerido
+    "version": ">= 7.0.0"
   }
 }
