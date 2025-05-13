@@ -16,18 +16,18 @@ export default function Welcome() {
       
       <View style={styles.content}>
         <Text style={styles.title}>QuickWork</Text>
-        <Text style={styles.subtitle}>Connect with local opportunities</Text>
+        <Text style={styles.subtitle}>Conecta con oportunidades locales</Text>
         
         <View style={styles.buttonContainer}>
           <Link href="/(app)/(tabs)" asChild>
             <TouchableOpacity style={[styles.button, styles.employerButton]}>
-              <Text style={styles.buttonText}>I'm hiring</Text>
+              <Text style={styles.buttonText}>Soy contratista</Text>
             </TouchableOpacity>
           </Link>
           
           <Link href="/(app)/(tabs)" asChild>
             <TouchableOpacity style={[styles.button, styles.workerButton]}>
-              <Text style={styles.buttonText}>I'm looking for work</Text>
+              <Text style={styles.buttonText}>Busco trabajo</Text>
             </TouchableOpacity>
           </Link>
         </View>
