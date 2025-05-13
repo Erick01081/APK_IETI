@@ -9,49 +9,56 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        tabBarActiveTintColor: '#007AFF',
+        tabBarInactiveTintColor: isDark ? '#666' : '#999',
         tabBarStyle: {
           backgroundColor: isDark ? '#1a1a1a' : '#fff',
-          borderTopWidth: 1,
-          borderTopColor: isDark ? '#333' : '#f0f0f0',
+          borderTopColor: isDark ? '#333' : '#ddd',
         },
-        tabBarActiveTintColor: '#007AFF',
-        tabBarInactiveTintColor: isDark ? '#888' : '#666',
-      }}>
+        headerStyle: {
+          backgroundColor: isDark ? '#1a1a1a' : '#fff',
+        },
+        headerTintColor: isDark ? '#fff' : '#000',
+        headerShown: false,
+      }}
+    >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Jobs',
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="briefcase-outline" size={size} color={color} />
+          title: 'Trabajos',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="briefcase" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="post"
         options={{
-          title: 'Post Job',
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="add-circle-outline" size={size} color={color} />
+          title: 'Publicar',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="add-circle" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ size, color }) => (
-            <Ionicons name="person-outline" size={size} color={color} />
+          title: 'Perfil',
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="job/[id]"
         options={{
-          // Ocultar esta pantalla de la barra de tabs
           href: null,
-          // Alternativamente puedes usar:
-          // tabBarButton: () => null,
+        }}
+      />
+      <Tabs.Screen
+        name="job/success"
+        options={{
+          href: null,
         }}
       />
     </Tabs>

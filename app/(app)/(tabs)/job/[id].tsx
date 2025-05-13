@@ -1,4 +1,4 @@
-import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, ScrollView, TouchableOpacity, useColorScheme } from 'react-native';
 import React from 'react';
 import { useLocalSearchParams, router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -9,7 +9,14 @@ export default function JobDetails() {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const { id } = useLocalSearchParams();
+  const colorScheme = useColorScheme();
   const job = jobs.find(j => j.id === id);
+
+  // Simulamos el usuario actual (esto debería venir de tu sistema de autenticación)
+  const currentUser = 'current_user';
+
+  // Verificamos si el trabajo fue publicado por el usuario actual
+  const isPostedByCurrentUser = job?.postedBy === currentUser;
 
   // Colores dinámicos basados en el tema
   const colors = {
@@ -30,6 +37,8 @@ export default function JobDetails() {
     );
   }
 
+  const isJobPoster = job.postedBy === currentUser;
+
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <Image source={{ uri: job.image }} style={styles.image} />
@@ -41,23 +50,23 @@ export default function JobDetails() {
       </TouchableOpacity>
       <View style={styles.content}>
         <View style={styles.header}>
-          <View>
-            <Text style={[styles.title, { color: colors.text }]}>{job.title}</Text>
-            <Text style={[styles.location, { color: colors.secondaryText }]}>
-              <Ionicons name="location-outline" size={16} color={colors.secondaryText} />
-              {' '}{job.location}
-            </Text>
-          </View>
-          <View style={styles.payInfo}>
-            <Text style={styles.payAmount}>${job.pay}</Text>
-            <Text style={[styles.payPeriod, { color: colors.secondaryText }]}>/hr</Text>
-          </View>
+          <Text style={[styles.title, { color: colors.text }]}>{job.title}</Text>
+          <Text style={[styles.location, { color: colors.secondaryText }]}>
+            <Ionicons name="location-outline" size={16} color={colors.secondaryText} />
+            {' '}{job.location}
+          </Text>
         </View>
+
+        <View style={styles.payInfo}>
+          <Text style={styles.payAmount}>${job.pay.toLocaleString('es-CO')}</Text>
+          <Text style={[styles.payPeriod, { color: colors.secondaryText }]}>/hr</Text>
+        </View>
+
         <View style={[styles.infoContainer, { backgroundColor: colors.infoBackground }]}>
           <View style={styles.infoItem}>
             <Ionicons name="time-outline" size={24} color={colors.primary} />
             <View style={styles.infoText}>
-              <Text style={[styles.infoLabel, { color: colors.secondaryText }]}>Duration</Text>
+              <Text style={[styles.infoLabel, { color: colors.secondaryText }]}>Duración</Text>
               <Text style={[styles.infoValue, { color: colors.text }]}>{job.duration}</Text>
             </View>
           </View>
@@ -65,26 +74,31 @@ export default function JobDetails() {
           <View style={styles.infoItem}>
             <Ionicons name="calendar-outline" size={24} color={colors.primary} />
             <View style={styles.infoText}>
-              <Text style={[styles.infoLabel, { color: colors.secondaryText }]}>Start Date</Text>
-              <Text style={[styles.infoValue, { color: colors.text }]}>Immediately</Text>
+              <Text style={[styles.infoLabel, { color: colors.secondaryText }]}>Fecha de inicio</Text>
+              <Text style={[styles.infoValue, { color: colors.text }]}>Inmediatamente</Text>
             </View>
           </View>
         </View>
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Description</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Descripción</Text>
           <Text style={[styles.description, { color: colors.descriptionText }]}>{job.description}</Text>
         </View>
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Requirements</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Requisitos</Text>
           <View style={styles.requirements}>
-            <Text style={[styles.requirement, { color: colors.descriptionText }]}>• Must be able to lift up to 25 lbs</Text>
-            <Text style={[styles.requirement, { color: colors.descriptionText }]}>• Reliable transportation</Text>
-            <Text style={[styles.requirement, { color: colors.descriptionText }]}>• Previous experience preferred</Text>
+            <Text style={[styles.requirement, { color: colors.descriptionText }]}>• Debe poder levantar hasta 25 kg</Text>
+            <Text style={[styles.requirement, { color: colors.descriptionText }]}>• Transporte confiable</Text>
+            <Text style={[styles.requirement, { color: colors.descriptionText }]}>• Se prefiere experiencia previa</Text>
           </View>
         </View>
-        <TouchableOpacity style={styles.applyButton}>
-          <Text style={styles.applyButtonText}>Apply Now</Text>
-        </TouchableOpacity>
+        {!isJobPoster && (
+          <TouchableOpacity 
+            style={styles.applyButton}
+            onPress={() => router.push('/job/success')}
+          >
+            <Text style={styles.applyButtonText}>Aplicar Ahora</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -113,10 +127,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 24,
+    marginBottom: 16,
   },
   title: {
     fontSize: 24,
@@ -128,17 +139,17 @@ const styles = StyleSheet.create({
   },
   payInfo: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
+    marginBottom: 24,
   },
   payAmount: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
     color: '#007AFF',
   },
   payPeriod: {
-    fontSize: 16,
-    marginBottom: 2,
-    marginLeft: 2,
+    fontSize: 18,
+    marginLeft: 4,
   },
   infoContainer: {
     flexDirection: 'row',
@@ -150,6 +161,7 @@ const styles = StyleSheet.create({
   infoItem: {
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
   },
   infoText: {
     marginLeft: 12,

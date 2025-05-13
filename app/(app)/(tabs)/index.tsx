@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, TextInput, Modal } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, TextInput, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { useState, useEffect } from 'react';
@@ -341,166 +341,171 @@ export default function JobsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Find Work</Text>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <View style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>Encontrar Trabajo</Text>
 
-        {/* Barra de búsqueda con icono y botón de filtro */}
-        <View style={styles.searchBarContainer}>
-          <Ionicons name="search-outline" size={20} color={isDark ? '#aaa' : '#666'} style={styles.searchIcon} />
-          <TextInput
-            style={styles.searchInput}
-            placeholder="Search jobs..."
-            placeholderTextColor={isDark ? '#999' : '#666'}
-            value={searchQuery}
-            onChangeText={setSearchQuery}
-          />
-          <TouchableOpacity
-            style={styles.filterButton}
-            onPress={() => setShowFilters(!showFilters)}>
-            <Ionicons
-              name={showFilters ? "options" : "options-outline"}
-              size={24}
-              color={isDark ? '#fff' : '#333'}
+          {/* Barra de búsqueda con icono y botón de filtro */}
+          <View style={styles.searchBarContainer}>
+            <Ionicons name="search-outline" size={20} color={isDark ? '#aaa' : '#666'} style={styles.searchIcon} />
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Buscar trabajos..."
+              placeholderTextColor={isDark ? '#999' : '#666'}
+              value={searchQuery}
+              onChangeText={setSearchQuery}
             />
-          </TouchableOpacity>
-        </View>
-
-        {/* Panel de filtros mejorado */}
-        {showFilters && (
-          <View style={styles.filterContainer}>
-            <View style={styles.filtersHeader}>
-              <Text style={styles.filtersTitle}>Filters</Text>
-              <TouchableOpacity onPress={clearFilters}>
-                <Text style={styles.clearFiltersText}>Clear All</Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.filterRow}>
-              <Text style={styles.filterLabel}>Location</Text>
-              <TouchableOpacity
-                style={styles.locationSelector}
-                onPress={() => setCitiesModalVisible(true)}>
-                {selectedFilters.location ? (
-                  <Text style={styles.locationText}>{selectedFilters.location}</Text>
-                ) : (
-                  <Text style={styles.locationPlaceholder}>Seleccionar ciudad en Colombia</Text>
-                )}
-                <Ionicons name="chevron-down" size={16} color={isDark ? '#aaa' : '#666'} />
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.filterRow}>
-              <Text style={styles.filterLabel}>Minimum Pay ($/hr)</Text>
-              <TextInput
-                style={styles.filterInput}
-                placeholder="Enter minimum pay"
-                placeholderTextColor={isDark ? '#999' : '#666'}
-                keyboardType="numeric"
-                value={selectedFilters.minPay}
-                onChangeText={(text) => setSelectedFilters({...selectedFilters, minPay: text})}
-              />
-            </View>
-
-            <View style={styles.filterRow}>
-              <Text style={styles.filterLabel}>Duration</Text>
-              <TextInput
-                style={styles.filterInput}
-                placeholder="e.g., 4-5 hours"
-                placeholderTextColor={isDark ? '#999' : '#666'}
-                value={selectedFilters.duration}
-                onChangeText={(text) => setSelectedFilters({...selectedFilters, duration: text})}
-              />
-            </View>
-
             <TouchableOpacity
-              style={styles.applyButton}
-              onPress={() => setShowFilters(false)}>
-              <Text style={styles.applyButtonText}>Apply Filters</Text>
+              style={styles.filterButton}
+              onPress={() => setShowFilters(!showFilters)}>
+              <Ionicons
+                name={showFilters ? "options" : "options-outline"}
+                size={24}
+                color={isDark ? '#fff' : '#333'}
+              />
             </TouchableOpacity>
           </View>
-        )}
-      </View>
 
-      <FlatList
-        data={filteredJobs}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.jobCard}
-            onPress={() => router.push(`/job/${item.id}`)}>
-            <Image source={{ uri: item.image }} style={styles.jobImage} />
-            <View style={styles.jobContent}>
-              <Text style={styles.jobTitle}>{item.title}</Text>
-              <Text style={styles.jobLocation}>
-                <Ionicons name="location-outline" size={16} color={isDark ? '#ccc' : '#666'} />
-                {' '}{item.location}
-              </Text>
-              <View style={styles.jobFooter}>
-                <Text style={styles.jobPay}>${item.pay}/hr</Text>
-                <Text style={styles.jobTime}>{item.duration}</Text>
+          {/* Panel de filtros mejorado */}
+          {showFilters && (
+            <View style={styles.filterContainer}>
+              <View style={styles.filtersHeader}>
+                <Text style={styles.filtersTitle}>Filtros</Text>
+                <TouchableOpacity onPress={clearFilters}>
+                  <Text style={styles.clearFiltersText}>Limpiar Todo</Text>
+                </TouchableOpacity>
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
-        contentContainerStyle={styles.listContent}
-      />
 
-      {/* Modal para seleccionar ciudades de Colombia */}
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={citiesModalVisible}
-        onRequestClose={() => setCitiesModalVisible(false)}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Seleccionar Ciudad</Text>
-              <TouchableOpacity onPress={() => setCitiesModalVisible(false)}>
-                <Ionicons name="close" size={24} color={isDark ? '#fff' : '#000'} />
+              <View style={styles.filterRow}>
+                <Text style={styles.filterLabel}>Ubicación</Text>
+                <TouchableOpacity
+                  style={styles.locationSelector}
+                  onPress={() => setCitiesModalVisible(true)}>
+                  {selectedFilters.location ? (
+                    <Text style={styles.locationText}>{selectedFilters.location}</Text>
+                  ) : (
+                    <Text style={styles.locationPlaceholder}>Seleccionar ciudad en Colombia</Text>
+                  )}
+                  <Ionicons name="chevron-down" size={16} color={isDark ? '#aaa' : '#666'} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.filterRow}>
+                <Text style={styles.filterLabel}>Pago Mínimo ($/hr)</Text>
+                <TextInput
+                  style={styles.filterInput}
+                  placeholder="Ingrese pago mínimo"
+                  placeholderTextColor={isDark ? '#999' : '#666'}
+                  keyboardType="numeric"
+                  value={selectedFilters.minPay}
+                  onChangeText={(text) => setSelectedFilters({...selectedFilters, minPay: text})}
+                />
+              </View>
+
+              <View style={styles.filterRow}>
+                <Text style={styles.filterLabel}>Duración</Text>
+                <TextInput
+                  style={styles.filterInput}
+                  placeholder="ej., 4-5 horas"
+                  placeholderTextColor={isDark ? '#999' : '#666'}
+                  value={selectedFilters.duration}
+                  onChangeText={(text) => setSelectedFilters({...selectedFilters, duration: text})}
+                />
+              </View>
+
+              <TouchableOpacity
+                style={styles.applyButton}
+                onPress={() => setShowFilters(false)}>
+                <Text style={styles.applyButtonText}>Aplicar Filtros</Text>
               </TouchableOpacity>
             </View>
-
-            <View style={styles.modalSearchContainer}>
-              <TextInput
-                style={styles.modalSearchInput}
-                placeholder="Buscar ciudad o departamento..."
-                placeholderTextColor={isDark ? '#999' : '#666'}
-                value={citySearchQuery}
-                onChangeText={setCitySearchQuery}
-              />
-            </View>
-
-            {isLoading ? (
-              <View style={styles.loadingContainer}>
-                <Text style={{ color: isDark ? '#fff' : '#000' }}>Cargando ciudades...</Text>
-              </View>
-            ) : (
-              <FlatList
-                data={filteredCities}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={styles.cityItem}
-                    onPress={() => handleSelectCity(item)}
-                  >
-                    <Text style={styles.cityName}>{item.name}</Text>
-                    <Text style={styles.cityDepartment}>{item.department}</Text>
-                  </TouchableOpacity>
-                )}
-                ListEmptyComponent={
-                  <View style={{ padding: 20, alignItems: 'center' }}>
-                    <Text style={{ color: isDark ? '#fff' : '#000' }}>
-                      No se encontraron ciudades con ese nombre
-                    </Text>
-                  </View>
-                }
-              />
-            )}
-          </View>
+          )}
         </View>
-      </Modal>
-    </View>
+
+        <FlatList
+          data={filteredJobs}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              style={styles.jobCard}
+              onPress={() => router.push(`/job/${item.id}`)}>
+              <Image source={{ uri: item.image }} style={styles.jobImage} />
+              <View style={styles.jobContent}>
+                <Text style={styles.jobTitle}>{item.title}</Text>
+                <Text style={styles.jobLocation}>
+                  <Ionicons name="location-outline" size={16} color={isDark ? '#ccc' : '#666'} />
+                  {' '}{item.location}
+                </Text>
+                <View style={styles.jobFooter}>
+                  <Text style={styles.jobPay}>${item.pay.toLocaleString('es-CO')}/hr</Text>
+                  <Text style={styles.jobTime}>{item.duration}</Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+          )}
+          contentContainerStyle={styles.listContent}
+        />
+
+        {/* Modal para seleccionar ciudades de Colombia */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={citiesModalVisible}
+          onRequestClose={() => setCitiesModalVisible(false)}
+        >
+          <View style={styles.modalContainer}>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Seleccionar Ciudad</Text>
+                <TouchableOpacity onPress={() => setCitiesModalVisible(false)}>
+                  <Ionicons name="close" size={24} color={isDark ? '#fff' : '#000'} />
+                </TouchableOpacity>
+              </View>
+
+              <View style={styles.modalSearchContainer}>
+                <TextInput
+                  style={styles.modalSearchInput}
+                  placeholder="Buscar ciudad o departamento..."
+                  placeholderTextColor={isDark ? '#999' : '#666'}
+                  value={citySearchQuery}
+                  onChangeText={setCitySearchQuery}
+                />
+              </View>
+
+              {isLoading ? (
+                <View style={styles.loadingContainer}>
+                  <Text style={{ color: isDark ? '#fff' : '#000' }}>Cargando ciudades...</Text>
+                </View>
+              ) : (
+                <FlatList
+                  data={filteredCities}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity
+                      style={styles.cityItem}
+                      onPress={() => handleSelectCity(item)}
+                    >
+                      <Text style={styles.cityName}>{item.name}</Text>
+                      <Text style={styles.cityDepartment}>{item.department}</Text>
+                    </TouchableOpacity>
+                  )}
+                  ListEmptyComponent={
+                    <View style={{ padding: 20, alignItems: 'center' }}>
+                      <Text style={{ color: isDark ? '#fff' : '#000' }}>
+                        No se encontraron ciudades con ese nombre
+                      </Text>
+                    </View>
+                  }
+                />
+              )}
+            </View>
+          </View>
+        </Modal>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
